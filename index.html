@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+
+  <body>
+    <div>
+      <div class="header">
+        <h1>Search Github Users</h1>
+        <h5>Enter a username to fetch a user profile and repos</h5>
+        <form><input /></form>
+        <button>Search</button>
+      </div>
+      <div id="infoContainer"></div>
+      <div class="repos">
+        <h2>Latest Repos</h2>
+        <div id="repoContainer"></div>
+      </div>
+    </div>
+
+    <script src="app.js"></script>
+    <script type="module">
+      import { Octokit, App } from "https://esm.sh/octokit";
+
+      let inputValue = "";
+
+      const input = document.querySelector("input");
+
+      input.addEventListener("change", updateValue);
+      function updateValue(e) {
+        inputValue = e.target.value;
+        console.log(inputValue);
+      }
+
+      const octokit = new Octokit({
+        auth:
+      });
+
+      const searchUsers = document.querySelector("button");
+      searchUsers.addEventListener("click", searchUser);
+      async function searchUser() {
+        console.log(inputValue);
+
+        drawInfo();
+      }
+      let data = await octokit.request("GET /users/{username}", {
+        // username: `${inputValue}`,
+        username: "AuroraPark",
+        headers: {
+          "X-GitHub-Api-Version": "2022-11-28",
+        },
+      });
+
+      let repoContent = await octokit.paginate("GET /users/{owner}/repos", {
+        // owner: `${inputValue}`,
+        owner: "AuroraPark",
+      });
+      function drawInfo() {
+        //  event.preventDefault();
+
+        const answerInfo = new answer(data);
+        const repoInfo1 = new repos(repoContent, 0);
+        const repoInfo2 = new repos(repoContent, 1);
+        const repoInfo3 = new repos(repoContent, 2);
+
+        infoContainer.append(answerInfo.getImage());
+
+        infoContainer.append(answerInfo.getRepos());
+        infoContainer.append(answerInfo.getFollowers());
+        infoContainer.append(answerInfo.getFollowing());
+        infoContainer.append(answerInfo.getGists());
+
+        infoContainer.append(answerInfo.getCom());
+        infoContainer.append(answerInfo.getBlog());
+        infoContainer.append(answerInfo.getLoc());
+        infoContainer.append(answerInfo.getMemberSince());
+
+        repoContainer.append(repoInfo1.getName());
+        repoContainer.append(repoInfo1.getStars());
+        repoContainer.append(repoInfo1.getWatchers());
+        repoContainer.append(repoInfo1.getForks());
+
+        repoContainer.append(repoInfo2.getName());
+        repoContainer.append(repoInfo2.getStars());
+        repoContainer.append(repoInfo2.getWatchers());
+        repoContainer.append(repoInfo2.getForks());
+
+        repoContainer.append(repoInfo3.getName());
+        repoContainer.append(repoInfo3.getStars());
+        repoContainer.append(repoInfo3.getWatchers());
+        repoContainer.append(repoInfo3.getForks());
+        inputValue = "";
+      }
+      //
+    </script>
+  </body>
+</html>

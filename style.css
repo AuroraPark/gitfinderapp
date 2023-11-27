@@ -1,0 +1,8 @@
+.header,
+#infoContainer,
+.repos {
+    border: 1px solid #ccc;
+    border-radius: 2px;
+    padding: 10px;
+    margin: 10px;
+}
